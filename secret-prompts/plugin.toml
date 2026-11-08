@@ -1,0 +1,29 @@
+# GnuPG pinentry and SSH_ASKPASS drawn by the shell. The noctalia-pinentry and
+# noctalia-askpass clients (../client) speak the protocol with gpg-agent/ssh and send
+# only the prompt text through `noctalia msg plugin`; the panel writes the answer to a
+# 0600 file in the client's private directory, $XDG_RUNTIME_DIR/noctalia-secret-prompts/<id>.
+
+id = "lbssousa/secret-prompts"
+name = "Secret Prompts"
+version = "1.0.0"
+plugin_api = 42
+author = "lbssousa"
+license = "MIT"
+tags = ["security", "utility"]
+icon = "key"
+description = "Answer gpg-agent (pinentry) and ssh/git (SSH_ASKPASS) prompts in a shell panel."
+
+[[service]]
+id = "service"
+entry = "service.luau"
+
+[[panel]]
+id = "prompt"
+entry = "panel.luau"
+width = 440
+height = "content"
+max_height = 560
+placement = "floating"
+position = "center"
+keyboard_focus = "exclusive"
+dismiss_on_outside_click = false
