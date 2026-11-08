@@ -5,7 +5,8 @@ passphrases and PINs. Fixes go to `main`. Report problems against the latest com
 
 ## Reporting a vulnerability
 
-Use **Security → Report a vulnerability** on this repository, which opens a private advisory.
+Use **Security → Report a vulnerability** on this repository, which opens a private advisory:
+<https://github.com/lbssousa/noctalia-secret-prompts/security/advisories/new>.
 Please don't open a public issue for a vulnerability.
 
 A useful report includes:
