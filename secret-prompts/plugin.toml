@@ -27,3 +27,7 @@ placement = "floating"
 position = "center"
 keyboard_focus = "exclusive"
 dismiss_on_outside_click = false
+# Modal backdrop (Noctalia with the lbssousa/noctalia modal backdrop patch): a
+# fullscreen "noctalia-panel-backdrop" layer below the panel, which the compositor
+# can blur and dim. Other Noctalia builds ignore the key.
+modal = true
