@@ -10,6 +10,11 @@ local secret = ""
 local repeated = ""
 local mismatch = false
 local isOpen = false
+-- The queue emptied and panel.close() was called. onClose only runs later (the shell queues
+-- it), and a request arriving in between must not become `current`: onClose would cancel it
+-- before it was ever shown (ssh's "Confirm user presence" right after the PIN, for one). It
+-- waits in the queue, and the service reopens the panel once panel_open turns false.
+local closing = false
 
 local function wipeInputs()
   secret = ""
@@ -188,9 +193,13 @@ local function sync(queue)
   if head == nil then
     current = nil
     wipeInputs()
-    if isOpen then
+    if isOpen and not closing then
+      closing = true
       panel.close()
     end
+    return
+  end
+  if closing then
     return
   end
   if current == nil or current.id ~= head.id then
@@ -204,6 +213,7 @@ noctalia.state.watch("queue", sync)
 
 function onOpen(_context)
   isOpen = true
+  closing = false
   noctalia.state.set("panel_open", true)
   current = nil
   sync(noctalia.state.get("queue"))
@@ -211,7 +221,13 @@ end
 
 function onClose()
   isOpen = false
-  -- Escape (or anything else that closes the panel) cancels the prompt on screen.
-  settle("cancel")
+  if closing then
+    -- Closed because the queue emptied: nothing was on screen (current is nil), and whatever
+    -- arrived since is still queued.
+    closing = false
+  else
+    -- Escape (or anything else that closes the panel) cancels the prompt on screen.
+    settle("cancel")
+  end
   noctalia.state.set("panel_open", false)
 end
